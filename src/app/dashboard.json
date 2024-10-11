@@ -1,0 +1,136 @@
+
+
+{
+    "flashcard-sets": [
+        {
+            "cards" : [{ 
+                "question": "A gas station sells regular gasoline for $2.39 per gallon and premium gasoline for $2.79 per gallon. If the gas station sold a total of 550 gallons of both types of gasoline in one day for a total of $1,344.50, how many gallons of premium gasoline were sold?",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B"
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "C",
+                "correct": "B"
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B"
+            },{ 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B"
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "A",
+                "correct": "B"
+            }],
+            "date": {
+                    "month": 7,
+                    "day": 28,
+                    "year": 2024,
+                    "time": "20:35"
+                },
+            "ID": "1233515", 
+            "subject": "Math",
+            "title": "Gas Station" 
+        },
+        {
+            "cards" : [{ 
+                "question": "A gas station sells regular gasoline for $2.39 per gallon and premium gasoline for $2.79 per gallon. If the gas station sold a total of 550 gallons of both types of gasoline in one day for a total of $1,344.50, how many gallons of premium gasoline were sold?",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B"
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B"
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B"
+            },{ 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B"
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "A",
+                "correct": "B"
+            }],
+            "date": {
+                    "month": 7,
+                    "day": 24,
+                    "year": 2024,
+                    "time": "20:35"
+                },
+            "ID": "151515", 
+            "subject": "Reading",
+            "title": "Edgar Allan Poe" 
+        }
+    ]
+}

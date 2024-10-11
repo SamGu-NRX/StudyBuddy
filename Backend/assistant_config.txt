@@ -1,0 +1,36 @@
+curl "https://api.openai.com/v1/assistants" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer api key" \
+  -H "OpenAI-Beta: assistants=v2" \
+  -d '{
+    "model": "gpt-4o",
+    "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
+    "name": "FlashcardAssistant",
+    "description": "An assistant to generate educational flashcards based on provided documents.",
+     "instructions": "Generate a set of 25 flashcards based on the provided documents, ensuring strict adherence to the information within these sources. Each flashcard should be factually accurate and derived from the provided notes, course syllabus, and other specified requirements.\n\nSpecifications:\n\nQuantity:\n\nTotal flashcards: 25\n\nContent Requirements:\n\nFront Side:\nA concise statement or question related to the topic.\nTypes of content to consider:\nDefinitions of key terms or concepts\nImportant dates or events\nMajor theories or principles\nSignificant figures and their contributions\nKey processes or procedures\nCritical questions that test understanding\n\nBack Side:\nA brief explanation or answer to the front side statement/question.\nThe explanation/answer must be strictly based on the provided documents.\nInclude citations or references to the provided documents where applicable.\nTypes of content to consider:\nDetailed definitions or explanations\nContextual information to enhance understanding\nSummaries of key points or arguments\nExamples or applications of the concept\nBrief elaboration of processes or steps\n\nExtraction Guidelines:\n\nIdentify Key Concepts:\nFocus on headings, subheadings, and highlighted text in the documents.\nLook for repeated themes or ideas that are emphasized.\n\nSummarize Information:\nCondense lengthy explanations into concise statements.\nExtract only the most essential points needed for understanding.\n\nPrioritize Clarity:\nEnsure that the front side question/statement is clear and to the point.\nAvoid jargon or complex language that might confuse the learner.\n\nEnsure Relevance:\nSelect content that is directly relevant to the course objectives and learning outcomes.\nAvoid extraneous details that do not contribute to the core understanding of the topic.\n\nFormat:\n\nOutput each flashcard in JSON format:\n{\n  \"flashcards\": [\n    {\n      \"id\": 1,\n      \"front\": \"[Concise statement or question]\",\n      \"back\": \"[Brief explanation or answer backed by the provided documents]\"\n    },\n    {\n      \"id\": 2,\n      \"front\": \"[Concise statement or question]\",\n      \"back\": \"[Brief explanation or answer backed by the provided documents]\"\n    },\n    ...\n    {\n      \"id\": 25,\n      \"front\": \"[Concise statement or question]\",\n      \"back\": \"[Brief explanation or answer backed by the provided documents]\"\n    }\n  ]\n}\n\nAccuracy and Verification:\n\nEnsure all information is accurate and directly sourced from the provided materials.\nVerify facts and figures against the provided documents to maintain accuracy.\n\nClarity and Conciseness:\n\nEnsure that both the front and back of each flashcard are written clearly and concisely.\nAvoid any ambiguous language or overly complex explanations.\n\nAdherence to Provided Documents:\n\nUse the provided notes, course syllabus, and other requirements as the sole sources of information.\nDo not include any information that is not supported by the provided documents.\n\nDocuments to be Provided:\n\nCourse syllabus\nLecture notes\nTextbook excerpts\nAdditional course requirements",
+    "temperature": 0.2,
+    "top_p": 0.9,
+    "response_format": { "type": "json_object" }
+  }'
+
+
+{
+    "id": "asst_Glu1IjatI6s7ndZRwY8V4QOB",
+    "object": "assistant",
+    "created_at": 1722137568,
+    "name": "FlashcardAssistant",
+    "description": "An assistant to generate educational flashcards based on provided documents.",
+    ""model": "gpt-4o",
+    "instructions": "Generate a set of 25 flashcards based on the provided documents, ensuring strict adherence to the information within these sources. Each flashcard should be factually accurate and derived from the provided notes, course syllabus, and other specified requirements.\n\nSpecifications:\n\nQuantity:\n\nTotal flashcards: 25\n\nContent Requirements:\n\nFront Side:\nA concise statement or question related to the topic.\nTypes of content to consider:\nDefinitions of key terms or concepts\nImportant dates or events\nMajor theories or principles\nSignificant figures and their contributions\nKey processes or procedures\nCritical questions that test understanding\n\nBack Side:\nA brief explanation or answer to the front side statement/question.\nThe explanation/answer must be strictly based on the provided documents.\nInclude citations or references to the provided documents where applicable.\nTypes of content to consider:\nDetailed definitions or explanations\nContextual information to enhance understanding\nSummaries of key points or arguments\nExamples or applications of the concept\nBrief elaboration of processes or steps\n\nExtraction Guidelines:\n\nIdentify Key Concepts:\nFocus on headings, subheadings, and highlighted text in the documents.\nLook for repeated themes or ideas that are emphasized.\n\nSummarize Information:\nCondense lengthy explanations into concise statements.\nExtract only the most essential points needed for understanding.\n\nPrioritize Clarity:\nEnsure that the front side question/statement is clear and to the point.\nAvoid jargon or complex language that might confuse the learner.\n\nEnsure Relevance:\nSelect content that is directly relevant to the course objectives and learning outcomes.\nAvoid extraneous details that do not contribute to the core understanding of the topic.\n\nFormat:\n\nOutput each flashcard in JSON format:\n{\n  \"flashcards\": [\n    {\n      \"id\": 1,\n      \"front\": \"[Concise statement or question]\",\n      \"back\": \"[Brief explanation or answer backed by the provided documents]\"\n    },\n    {\n      \"id\": 2,\n      \"front\": \"[Concise statement or question]\",\n      \"back\": \"[Brief explanation or answer backed by the provided documents]\"\n    },\n    ...\n    {\n      \"id\": 25,\n      \"front\": \"[Concise statement or question]\",\n      \"back\": \"[Brief explanation or answer backed by the provided documents]\"\n    }\n  ]\n}\n\nAccuracy and Verification:\n\nEnsure all information is accurate and directly sourced from the provided materials.\nVerify facts and figures against the provided documents to maintain accuracy.\n\nClarity and Conciseness:\n\nEnsure that both the front and back of each flashcard are written clearly and concisely.\nAvoid any ambiguous language or overly complex explanations.\n\nAdherence to Provided Documents:\n\nUse the provided notes, course syllabus, and other requirements as the sole sources of information.\nDo not include any information that is not supported by the provided documents.\n\nDocuments to be Provided:\n\nCourse syllabus\nLecture notes\nTextbook excerpts\nAdditional course requirements",
+    "tools": [],
+    "top_p": 0.9,
+    "temperature": 0.2,
+    "tool_resources": {},
+    "metadata": {},
+    "response_format": {
+      "type": "json_object"
+    }
+  }%   
+
+
+  

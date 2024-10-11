@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+  // relationMode = "prisma"
+}
+
+model FlashcardSet {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  flashcards Flashcard[]
+  subject    String
+
+  quizzes    Quiz[] @relation(name: "QuizToFlashcardSet")
+
+  userId     String      @db.ObjectId
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Flashcard {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  front          String
+  back           String
+  source         String
+  date           FlashcardDate @relation(fields: [dateId], references: [id])
+  dateId         String        @db.ObjectId
+  isSaved        Boolean       @default(false)
+
+  flashcardSetId String        @db.ObjectId
+  flashcardSet   FlashcardSet  @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
+
+  quizQuestion   QuizQuestion? @relation(name: "FlashcardToQuizQuestion")
+
+}
+
+model FlashcardDate {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  day       Int
+  month     Int
+  time      String
+  year      Int
+
+  flashcards Flashcard[]
+}
+
+model ContextFiles {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  gradeLevel   String
+  subject      String
+  
+  syllabusText String
+  notesText    String
+
+  // Each user can have multiple context files and each file can only belong to one user
+  userId       String        @db.ObjectId
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  quizzes      Quiz[]
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  MATCHING
+  SHORT_RESPONSE
+  IMAGE_UPLOAD
+}
+
+model Quiz {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  teacherId      String        @db.ObjectId
+  teacher        User          @relation("TeacherQuizzes", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  questions      QuizQuestion[]
+  contextFileId  String?       @db.ObjectId
+  contextFile    ContextFiles? @relation(fields: [contextFileId], references: [id], onDelete: SetNull)
+
+  quizResponses  QuizResponse[]
+
+  flashcardSetId String?       @db.ObjectId
+  flashcardSet   FlashcardSet? @relation(name: "QuizToFlashcardSet", fields: [flashcardSetId], references: [id])
+}
+
+model QuizQuestion {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  question    String
+  type        QuestionType
+  options     String[]      // For MULTIPLE_CHOICE and MATCHING
+  answers     String[]      // Correct answers for MULTIPLE_CHOICE and MATCHING pairs
+  keywords    String[]      // For SHORT_RESPONSE grading
+  imagePath   String?       // For IMAGE_UPLOAD questions
+
+  quizId      String        @db.ObjectId
+  quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  flashcardId String?       @db.ObjectId @unique
+  flashcard   Flashcard?    @relation(name: "FlashcardToQuizQuestion", fields: [flashcardId], references: [id], onDelete: SetNull)
+
+  quizResponseId String?     @db.ObjectId
+  quizResponse   QuizResponse? @relation("IncorrectQuestions", fields: [quizResponseId], references: [id])
+}
+
+model QuizResponse {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  studentId   String        @db.ObjectId
+  student     User          @relation("StudentResponses", fields: [studentId], references: [id], onDelete: Cascade)
+
+  quizId      String        @db.ObjectId
+  quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  answers     String[]      // Store answers as array of strings or custom type if needed
+  imagePaths  String[]      // Paths to uploaded images for IMAGE_UPLOAD questions
+  score       Float
+  createdAt   DateTime      @default(now())
+  feedback    String[]      // Teacher or AI-generated feedback per question
+
+  incorrectQuestions QuizQuestion[] @relation("IncorrectQuestions")
+}
+
+// User Info starts here
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+model User {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?       @unique
+  emailVerified  DateTime?     @map("email_verified")
+  phoneNumber    String?
+  image          String?
+  hashedPassword String?
+  firstTime      Boolean       @default(true)
+
+  role          UserRole      @default(STUDENT)// STUDENT, TEACHER, ADMIN
+  accounts      Account[]
+  sessions      Session[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Adding relations to ContextFiles
+  contextFiles  ContextFiles[]
+  quizzesCreated Quiz[] @relation("TeacherQuizzes")
+  quizzesTaken  QuizResponse[] @relation("StudentResponses")
+
+  // Relations for conversations and messages
+  conversationIds String[] @db.ObjectId
+  conversations Conversation[] @relation(fields: [conversationIds], references: [id])
+
+
+  messages      Message[]
+  seenMessageIds String[] @db.ObjectId
+  seenMessages  Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
+
+  @@map("users")
+  
+  FlashcardSet FlashcardSet[]
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id      String   @id @default(cuid()) @map("_id")
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid()) @map("_id")
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model Conversation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  lastMessageAt DateTime @default(now())
+  name String?
+  isGroup Boolean?
+
+  messagesIds String[] @db.ObjectId
+  messages Message[]
+
+  userIds String[] @db.ObjectId
+  users User[] @relation(fields: [userIds], references: [id])
+}
+
+model Message {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  body String?
+  image String?
+  createdAt DateTime @default(now())
+  
+  seenIds String[] @db.ObjectId
+  seen User[] @relation("Seen", fields: [seenIds], references: [id])
+
+  conversationId String @db.ObjectId
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  senderId String @db.ObjectId
+  sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}

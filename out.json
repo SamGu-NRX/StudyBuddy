@@ -1,0 +1,155 @@
+{
+  "error": false,
+  "flashcards": [
+    {
+      "back": "Sociology is the scientific study of society, social institutions, and social relationships.",
+      "front": "What is the definition of sociology?",
+      "id": 1,
+      "source": "Course syllabus"
+    },
+    {
+      "back": "Auguste Comte is considered the father of sociology for coining the term and establishing the field as a separate science.",
+      "front": "Who is considered the father of sociology?",
+      "id": 2,
+      "source": "Lecture notes"
+    },
+    {
+      "back": "Socialization is the process through which individuals learn and internalize the values, beliefs, and norms of a given society.",
+      "front": "What is the concept of socialization?",
+      "id": 3,
+      "source": "Textbook excerpts"
+    },
+    {
+      "back": "The sociological imagination allows individuals to understand their own experiences in the context of broader social structures and historical forces.",
+      "front": "What is the significance of the sociological imagination?",
+      "id": 4,
+      "source": "Course syllabus"
+    },
+    {
+      "back": "C. Wright Mills introduced the concept of the sociological imagination in his work.",
+      "front": "Who introduced the concept of the sociological imagination?",
+      "id": 5,
+      "source": "Lecture notes"
+    },
+    {
+      "back": "Culture refers to the shared beliefs, values, practices, and norms that characterize a society.",
+      "front": "What is the definition of culture in sociology?",
+      "id": 6,
+      "source": "Textbook excerpts"
+    },
+    {
+      "back": "Social institutions are structures that provide the framework for society by fulfilling essential functions such as education, government, and family.",
+      "front": "What is the role of social institutions in society?",
+      "id": 7,
+      "source": "Course syllabus"
+    },
+    {
+      "back": "Family is a key social institution that plays a crucial role in socializing individuals and providing emotional support.",
+      "front": "Name a key social institution.",
+      "id": 8,
+      "source": "Lecture notes"
+    },
+    {
+      "back": "Social stratification refers to the hierarchical arrangement of individuals into social classes based on factors like wealth, power, and prestige.",
+      "front": "What is the definition of social stratification?",
+      "id": 9,
+      "source": "Textbook excerpts"
+    },
+    {
+      "back": "Social mobility refers to the ability of individuals or groups to move within the social hierarchy, often influenced by factors like education and economic opportunities.",
+      "front": "What is the concept of social mobility?",
+      "id": 10,
+      "source": "Course syllabus"
+    },
+    {
+      "back": "The types of social mobility include intergenerational mobility (between generations) and intragenerational mobility (within a person's lifetime).",
+      "front": "What are the types of social mobility?",
+      "id": 11,
+      "source": "Lecture notes"
+    },
+    {
+      "back": "Deviance refers to behavior that violates social norms and is often stigmatized by society.",
+      "front": "Define the concept of deviance in sociology.",
+      "id": 12,
+      "source": "Textbook excerpts"
+    },
+    {
+      "back": "Social control refers to the mechanisms and strategies used by society to regulate individual behavior and ensure conformity to norms.",
+      "front": "What is the role of social control in society?",
+      "id": 13,
+      "source": "Course syllabus"
+    },
+    {
+      "back": "The 'looking-glass self' theory suggests that individuals develop their self-concept based on how they believe others perceive them.",
+      "front": "Explain the concept of the 'looking-glass self'.",
+      "id": 14,
+      "source": "Lecture notes"
+    },
+    {
+      "back": "Globalization is the process of increased interconnectedness and interdependence among countries, economies, and cultures.",
+      "front": "What is the definition of globalization?",
+      "id": 15,
+      "source": "Textbook excerpts"
+    },
+    {
+      "back": "Cultural relativism is the idea that a person's beliefs and practices should be understood based on that person's own culture, rather than be judged against the criteria of another.",
+      "front": "What is the concept of cultural relativism?",
+      "id": 16,
+      "source": "Course syllabus"
+    },
+    {
+      "back": "Max Weber introduced the concept of the 'iron cage of rationality' to describe the dehumanizing effects of bureaucracy and rationalization.",
+      "front": "Who introduced the concept of the 'iron cage of rationality'?",
+      "id": 17,
+      "source": "Lecture notes"
+    },
+    {
+      "back": "Social change refers to the transformation of societal institutions and norms over time, often influenced by technological advancements and cultural shifts.",
+      "front": "Define the term 'social change'.",
+      "id": 18,
+      "source": "Textbook excerpts"
+    },
+    {
+      "back": "Social movements are collective efforts by individuals or groups to bring about social, political, or cultural change.",
+      "front": "What is the role of social movements in society?",
+      "id": 19,
+      "source": "Course syllabus"
+    },
+    {
+      "back": "Charles Tilly is a key sociologist known for his research on social movements and contentious politics.",
+      "front": "Name a key sociologist known for their work on social movements.",
+      "id": 20,
+      "source": "Lecture notes"
+    },
+    {
+      "back": "Gender inequality refers to the unequal treatment or perceptions of individuals based on their gender, often resulting in disparities in opportunities and resources.",
+      "front": "Define the concept of gender inequality.",
+      "id": 21,
+      "source": "Textbook excerpts"
+    },
+    {
+      "back": "Intersectionality emphasizes how various social categories such as race, class, and gender intersect and interact to shape individuals' experiences and social outcomes.",
+      "front": "What is the significance of intersectionality in sociology?",
+      "id": 22,
+      "source": "Course syllabus"
+    },
+    {
+      "back": "Kimberl\u00e9 Crenshaw coined the term 'intersectionality' to highlight the interconnected nature of social categorizations and their impact on individuals.",
+      "front": "Who coined the term 'intersectionality'?",
+      "id": 23,
+      "source": "Lecture notes"
+    },
+    {
+      "back": "Environmental sociology examines the relationship between society and the environment, focusing on issues such as sustainability, pollution, and resource management.",
+      "front": "Explain the concept of environmental sociology.",
+      "id": 24,
+      "source": "Textbook excerpts"
+    },
+    {
+      "back": "Social research involves the systematic study of society to understand social phenomena, behaviors, and trends through empirical evidence and analysis.",
+      "front": "What is the role of social research in sociology?",
+      "id": 25,
+      "source": "Course syllabus"
+    }
+  ]
+}
