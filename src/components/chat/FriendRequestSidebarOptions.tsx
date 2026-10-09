@@ -11,6 +11,36 @@ interface FriendRequestSidebarOptionsProps {
   initialUnseenRequestCount: number
 }
 
+/**
+ * Renders the 'Friend requests' row in the chat sidebar: a link to
+ * `/dashboard/requests` showing a User icon, a truncated label, and a
+ * live count badge with the number of unseen friend requests (the badge
+ * is hidden while the count is 0).
+ *
+ * The badge stays live through two Pusher subscriptions, both made inside
+ * a single `useEffect` keyed on `sessionId`:
+ *
+ * - Channel `user:<sessionId>:incoming_friend_requests` — every
+ *   `incoming_friend_requests` event increments the count. (The event
+ *   payload is an `IncomingFriendRequest[]` — see src/types/pusher.d.ts —
+ *   but this handler ignores it and only counts.)
+ * - Channel `user:<sessionId>:friends` — a `new_friend` event, fired when
+ *   a pending request is accepted, decrements the count.
+ *
+ * Channel names follow the app-wide convention: the raw server-side key
+ * `user:<id>:<event>` is passed through `toPusherKey` (src/lib/utils.ts),
+ * which replaces every `:` with `__`, so Pusher receives channel names
+ * like `user__<id>__<event>`.
+ *
+ * The effect's cleanup unsubscribes from both channels and unbinds both
+ * handlers on unmount (or when `sessionId` changes), so no stale events
+ * fire against a dead component and no duplicate bindings accumulate.
+ *
+ * @param props.sessionId - ID of the signed-in user; scopes both Pusher
+ *   channels to their private friend-request and friends feeds.
+ * @param props.initialUnseenRequestCount - Unseen-request count fetched
+ *   server-side; seeds the badge before any live events arrive.
+ */
 const FriendRequestSidebarOptions: FC<FriendRequestSidebarOptionsProps> = ({
   sessionId,
   initialUnseenRequestCount,
