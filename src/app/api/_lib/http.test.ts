@@ -28,9 +28,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock("@/../auth", () => ({ auth: mocks.auth }));
 vi.mock("@/lib/db", () => ({ db: mocks.db }));
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { auth as mockedAuth } from "@/../auth";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { db as mockedDb } from "@/lib/db";
 
 describe("mock plumbing", () => {
