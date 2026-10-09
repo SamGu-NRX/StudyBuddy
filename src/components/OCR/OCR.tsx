@@ -7,6 +7,22 @@ import { createWorker, PSM, OEM } from 'tesseract.js';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
+/**
+ * Client-side OCR intake panel: turns an uploaded image into text.
+ *
+ * Renders a Mantine `Dropzone` until an image is present, then a clickable
+ * preview. Clicking the preview opens a modal where the image can be zoomed
+ * and a region selected; confirming the crop replaces the preview with the
+ * cropped JPEG and immediately runs recognition on it. A tesseract worker
+ * (English model) is created once on mount and terminated on unmount, so
+ * recognition is only available while this component is mounted.
+ *
+ * Props:
+ * - `onOcrComplete` — invoked with the recognized text after each successful
+ *   run; the only channel through which results leave this component.
+ * - `initialFile` — when provided, loaded on mount (or whenever the prop
+ *   identity changes) as if it had been dropped on the dropzone.
+ */
 const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: string) => void, initialFile?: File | null }) => {
   const [imageData, setImageData] = useState<null | string>(null);
   const [crop, setCrop] = useState<Crop>();
@@ -23,6 +39,10 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
   const workerRef = useRef<Tesseract.Worker | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
+  // Asynchronously reads a picked file into a base64 data URL and stores it
+  // as `imageData`, which swaps the dropzone for the preview. Touches no
+  // other state, so a previous run's result panel and progress bar stay as
+  // they were until recognition runs again.
   const loadFile = (file: File) => {
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -32,6 +52,12 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
     reader.readAsDataURL(file);
   };
 
+  // Mounts a tesseract worker for the English model with automatic page
+  // segmentation and the LSTM-only engine, and tears it down on unmount.
+  // Until the async initialization finishes, `workerRef` is null and any
+  // recognition request hits handleExtract's guard and is silently dropped.
+  // A rejected createWorker here surfaces only as an unhandled promise
+  // rejection and leaves the component permanently without OCR.
   useEffect(() => {
     const initializeWorker = async () => {
       const worker = await createWorker("eng");
@@ -56,6 +82,11 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
     }
   }, [initialFile]);
 
+  // Paints the selected crop of `image` onto an offscreen canvas — rescaling
+  // from displayed to natural pixels — and encodes it as a quality-1 JPEG
+  // data URL. The promise has no reject path: when the canvas yields no
+  // blob, this function only logs and never settles, leaving an awaiting
+  // caller (handleCropComplete) hanging.
   const getCroppedImg = (image: HTMLImageElement, crop: Crop): Promise<string> => {
     const canvas = document.createElement('canvas');
     const scaleX = image.naturalWidth / image.width;
@@ -95,6 +126,11 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
     });
   };
 
+  // Confirm Crop handler for the modal. Produces the cropped JPEG data URL,
+  // promotes it to the preview image (so the displayed image becomes the
+  // cropped one), closes the modal, and fires recognition without awaiting
+  // it. A no-op when no selection exists or the modal image ref is unset —
+  // the button stays enabled but gives the user no feedback.
   const handleCropComplete = async () => {
     if (!crop || !imgRef.current) return;
 
@@ -108,6 +144,13 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
     }
   };
 
+  // Runs recognition on the given data URL and publishes the result. Resets
+  // the progress UI, awaits the worker, then passes the text to
+  // `onOcrComplete` and reveals the result panel after a 500 ms delay. No
+  // logger is attached to the worker, so the progress bar holds at 0 for
+  // the whole run and only jumps to 100 afterwards; errors leave it at 0
+  // with the label 'Error occurred'. The parameter shadows the `imageData`
+  // state variable — inside this function only the argument is visible.
   const handleExtract = async (imageData: string) => {
     if (!imageData || !workerRef.current) return;
   
@@ -134,10 +177,14 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
     }
   };
 
+  // Steps the modal image's visual zoom up 0.1x, clamped to MAX_ZOOM;
+  // the Zoom In button disables at the ceiling.
   const handleZoomIn = () => {
     setZoom(prevZoom => Math.min(prevZoom + 0.1, MAX_ZOOM));
   };
 
+  // Steps the modal image's visual zoom down 0.1x, clamped to MIN_ZOOM;
+  // the Zoom Out button disables at the floor.
   const handleZoomOut = () => {
     setZoom(prevZoom => Math.max(prevZoom - 0.1, MIN_ZOOM));
   };
