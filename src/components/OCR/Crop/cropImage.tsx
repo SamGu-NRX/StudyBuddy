@@ -1,29 +1,55 @@
+import { computeCanvasSize, type CropArea } from '../lib/cropMath';
+
 const TO_RADIANS = Math.PI / 180;
 
-export async function canvasPreview(image, crop, scale = 1, rotate = 0) {
+export async function canvasPreview(
+  image: HTMLImageElement | null | undefined,
+  crop: CropArea,
+  scale = 1,
+  rotate = 0
+): Promise<string> {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
+
+  if (!image) {
+    throw new Error('canvasPreview: image is required');
+  }
 
   if (!ctx) {
     throw new Error('No 2d context');
   }
 
-  const scaleX = image?.naturalWidth / image?.width;
-  const scaleY = image?.naturalHeight / image?.height;
+  const devicePixelRatio = typeof window === 'undefined' ? undefined : window.devicePixelRatio;
   // devicePixelRatio slightly increases sharpness on retina devices
   // at the expense of slightly slower render times and needing to
   // size the image back down if you want to download/upload and be
   // true to the images natural size.
-  const pixelRatio = window?.devicePixelRatio;
+  // Fall back to 1 when devicePixelRatio is unavailable so the canvas math
+  // never multiplies by undefined and produces NaN dimensions.
+  const pixelRatio = devicePixelRatio ?? 1;
+  if (!Number.isFinite(pixelRatio) || pixelRatio <= 0) {
+    throw new Error('canvasPreview: pixelRatio must be a finite number - fall back to 1 when undefined');
+  }
 
-  canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
-  canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
+  // Pure size math, validated: throws TypeError on invalid image/crop values.
+  const size = computeCanvasSize(
+    {
+      naturalWidth: image.naturalWidth,
+      naturalHeight: image.naturalHeight,
+      width: image.width,
+      height: image.height
+    },
+    crop,
+    scale,
+    rotate,
+    pixelRatio
+  );
+
+  canvas.width = size.canvasWidth;
+  canvas.height = size.canvasHeight;
 
   ctx.scale(pixelRatio, pixelRatio);
   ctx.imageSmoothingQuality = 'high';
-
-  const cropX = crop.x * scaleX;
-  const cropY = crop.y * scaleY;
 
   const rotateRads = rotate * TO_RADIANS;
   const centerX = image.naturalWidth / 2;
@@ -32,7 +58,7 @@ export async function canvasPreview(image, crop, scale = 1, rotate = 0) {
   ctx.save();
 
   // 5) Move the crop origin to the canvas origin (0,0)
-  ctx.translate(-cropX, -cropY);
+  ctx.translate(-size.cropX, -size.cropY);
   // 4) Move the origin to the center of the original position
   ctx.translate(centerX, centerY);
   // 3) Rotate around the origin
@@ -67,15 +93,29 @@ export async function canvasPreview(image, crop, scale = 1, rotate = 0) {
   // return canvas.toDataURL('image/jpeg');
 
   // As a blob
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     canvas.toBlob((blob) => {
-      var blobUrl = URL.createObjectURL(blob);
+      if (!blob) {
+        reject(new Error('canvasPreview: canvas.toBlob returned a null blob'));
+        return;
+      }
 
-      var link = document.createElement('a');
+      const blobUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
       link.href = blobUrl;
       link.download = 'springverify.jpg';
 
       link.click();
+
+      // Revoke on a delay instead of synchronously: revoking immediately after
+      // click() can cancel the download before the browser has consumed the
+      // URL. The 10s grace period keeps the leak window bounded.
+      setTimeout(() => {
+        URL.revokeObjectURL(blobUrl);
+      }, 10_000);
+
+      resolve(blobUrl);
     }, 'image/jpeg');
   });
 }
