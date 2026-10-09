@@ -1,0 +1,11 @@
+{
+  "capturedAt": "2026-10-09T19:54:21.822Z",
+  "machine": {
+    "loadavg1m": 0.37,
+    "loadavg5m": 0.22,
+    "loadavg15m": 0.16,
+    "cores": 8
+  },
+  "nodeVersion": "v20.20.2",
+  "results": []
+}
