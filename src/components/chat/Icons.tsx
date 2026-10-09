@@ -1,5 +1,19 @@
 import { LucideProps, UserPlus } from 'lucide-react'
 
+/**
+ * Registry of icons used across the chat UI. Each entry is a component that
+ * renders one SVG and accepts lucide props, so callers can either reference
+ * an icon directly (`Icons.Logo`) or resolve it by key at runtime
+ * (`Icons[option.Icon]` in MobileChatLayout).
+ *
+ * The keys of this object also define the `Icon` union used by the global
+ * `SidebarOption` interface (src/types/typings.d.ts), which stores an icon
+ * key on every sidebar entry.
+ *
+ * `Logo` renders an inline send-arrow `<svg>` with its own viewBox. It
+ * ignores lucide stroke styling — the path is filled with `currentColor` —
+ * and forwards all remaining props to the svg root.
+ */
 export const Icons = {
   Logo: (props: LucideProps) => (
     <svg {...props} viewBox='0 0 2000 2000'>
@@ -12,4 +26,9 @@ export const Icons = {
   UserPlus
 }
 
+/**
+ * Union of the allowed `Icons` keys, i.e. the string names that may be
+ * stored in `SidebarOption.Icon` and looked up in the `Icons` registry to
+ * obtain the matching icon component.
+ */
 export type Icon = keyof typeof Icons
