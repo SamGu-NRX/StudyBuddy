@@ -72,6 +72,31 @@ Our team gained valuable experience in:
 - Debugging and problem-solving in a hackathon environment
 - Project management and effective team communication
 
+## Testing
+
+The repository ships with a Vitest-based test suite (`pnpm test`), covering the main user flows
+(register, login, email verification, password reset, flashcard creation/saving, AI generation calls,
+OCR pipeline, dashboard data, middleware) plus pytest coverage for the Flask backend.
+
+```bash
+pnpm install && npx prisma generate
+pnpm test              # run the full JS/TS suite (vitest run)
+npx vitest run src/actions/login.test.ts   # a single file
+pnpm typecheck         # tsc --noEmit
+pnpm lint              # next lint
+
+# Flask backend tests (Python 3):
+cd Backend && python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt -r requirements-dev.txt
+python -m pytest tests/
+```
+
+Tests exercise the real public interface of each module (server actions, Next.js route handlers,
+components) and fake only true external boundaries: MongoDB via a mocked Prisma client (`@/lib/db`),
+NextAuth sessions (`@/../auth`), the Resend email API, the Flask/OpenAI backend behind `fetch`,
+`tesseract.js`, and `googleapis`. No test touches the network or a real database.
+
+
 ## How to Run
 
 ### Requirements

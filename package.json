@@ -6,7 +6,10 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
@@ -86,6 +89,9 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/canvas-confetti": "^1.6.4",
     "@types/intro.js": "^5.1.5",
@@ -98,6 +104,7 @@
     "css-loader": "^7.1.2",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.13",
+    "jsdom": "^25.0.1",
     "mini-css-extract-plugin": "^2.9.0",
     "pnpm": "^9.6.0",
     "postcss": "^8.4.39",
@@ -106,7 +113,8 @@
     "prisma": "^5.17.0",
     "tailwindcss": "^3.4.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.9"
   },
   "peerDependencies": {
     "next": "14.2.13",
