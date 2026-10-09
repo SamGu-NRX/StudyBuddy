@@ -1,0 +1,11 @@
+# Test-only dependencies. Runtime dependencies live in requirements.txt.
+# Install both with:  pip install -r requirements.txt -r requirements-dev.txt
+pytest
+httpx
+# Backend/api.py imports these at module load time, so importing the module in
+# tests requires them even though they are currently missing from
+# requirements.txt (see the packaging finding in the test suite).
+fastapi
+pymongo
+python-dotenv
+python-multipart
