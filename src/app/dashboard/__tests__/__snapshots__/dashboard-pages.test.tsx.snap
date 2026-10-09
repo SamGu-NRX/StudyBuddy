@@ -1,0 +1,59 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`dashboard/generate/page.tsx > renders the flashcards feature inside the page chrome 1`] = `
+<div>
+  <div
+    class="flex min-h-screen w-full flex-col bg-muted/40"
+  >
+    <nav
+      data-testid="sidebar"
+    />
+    <div
+      class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14"
+    >
+      <header
+        data-testid="header"
+      />
+      <main
+        class="gap-4 p-4 sm:px-6 sm:py-0 md:gap-8"
+      >
+        <div
+          data-testid="flashcards-feature"
+        />
+      </main>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dashboard/page.tsx > renders the Dashboard feature once authenticated 1`] = `
+<div>
+  <div
+    data-testid="dashboard-feature"
+  />
+</div>
+`;
+
+exports[`dashboard/page.tsx > renders the loading placeholder while the session is loading 1`] = `
+<div>
+  <div>
+    Loading...
+  </div>
+</div>
+`;
+
+exports[`dashboard/settings/page.tsx > renders the Settings feature once authenticated 1`] = `
+<div>
+  <div
+    data-testid="settings-feature"
+  />
+</div>
+`;
+
+exports[`dashboard/settings/page.tsx > renders the loading placeholder while the session is loading 1`] = `
+<div>
+  <p>
+    Loading...
+  </p>
+</div>
+`;
