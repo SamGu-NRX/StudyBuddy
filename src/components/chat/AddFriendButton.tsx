@@ -1,17 +1,27 @@
 'use client'
 
 import { addFriendValidator } from '@/schema'
-// import axios, { AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 import { FC, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+/** Props for {@link AddFriendButton}. Currently empty — the component takes no props. */
 interface AddFriendButtonProps {}
 
+/** Form shape inferred from {@link addFriendValidator}: `{ email: string }`. */
 type FormData = z.infer<typeof addFriendValidator>
 
+/**
+ * Email form that sends a friend request via `POST /api/friends/add`.
+ *
+ * Validation runs client-side through {@link addFriendValidator} (zod) via
+ * react-hook-form; zod and axios failures surface as an inline error message
+ * under the input. On success the form swaps to a "Friend request sent!"
+ * message (which does not reset on further submits).
+ */
 const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
   const [showSuccessState, setShowSuccessState] = useState<boolean>(false)
 
@@ -24,6 +34,10 @@ const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
     resolver: zodResolver(addFriendValidator),
   })
 
+  // DOCUMENTED, NOT FIXED: `parse` already returns `{ email: string }`, so
+  // posting `{ email: validatedEmail }` double-wraps the body to
+  // `{ email: { email: string } }`. Left as-is — /api/friends/add has no route
+  // under src/app/api, so the expected server contract is unconfirmed.
   const addFriend = async (email: string) => {
     try {
       const validatedEmail = addFriendValidator.parse({ email })
