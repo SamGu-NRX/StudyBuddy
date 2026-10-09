@@ -12,6 +12,26 @@ interface FriendRequestsProps {
   sessionId: string
 }
 
+/**
+ * Renders the signed-in user's incoming friend requests, each with
+ * accept/deny buttons.
+ *
+ * Live updates: subscribes via `pusherClient` to the
+ * `user:<sessionId>:incoming_friend_requests` Pusher channel (key built with
+ * `toPusherKey`) and appends new `IncomingFriendRequest` payloads as they
+ * arrive. Accept/deny POST to `/api/friends/accept` and `/api/friends/deny`,
+ * then call `router.refresh()`.
+ *
+ * Known gaps (kept as-is, behavior-neutral doc only):
+ * - No route handlers exist under `src/app/api` for the accept/deny paths,
+ *   so those POSTs currently fail.
+ * - `acceptFriend`/`denyFriend` have no error handling: a failed POST
+ *   rejects unhandled and the row is not removed.
+ * - Rendered only within `src/components/chat/`.
+ *
+ * `IncomingFriendRequest` is an ambient global type declared in
+ * `src/types/pusher.d.ts`, not an import.
+ */
 const FriendRequests: FC<FriendRequestsProps> = ({
   incomingFriendRequests,
   sessionId,
@@ -25,13 +45,11 @@ const FriendRequests: FC<FriendRequestsProps> = ({
     pusherClient.subscribe(
       toPusherKey(`user:${sessionId}:incoming_friend_requests`)
     )
-    console.log("listening to ", `user:${sessionId}:incoming_friend_requests`)
 
     const friendRequestHandler = ({
       senderId,
       senderEmail,
     }: IncomingFriendRequest) => {
-      console.log("function got called")
       setFriendRequests((prev) => [...prev, { senderId, senderEmail }])
     }
 
