@@ -1,13 +1,35 @@
 'use client'
 
+/**
+ * MobileChatLayout — mobile top bar + slide-in navigation drawer for the chat
+ * dashboard. The fixed top bar shows the app logo (links to /dashboard) and a
+ * Menu button; the drawer mirrors the desktop chat sidebar
+ * (src/components/chat/Sidebar.tsx): the friend chat list, sidebar navigation
+ * options, the friend-requests entry point, and a profile row with sign-out.
+ * Built with @headlessui/react Dialog + Transition (slides in from the left)
+ * and closed automatically on navigation.
+ *
+ * Docs audit findings (documented, intentionally not fixed):
+ *  - The '@headlessui/react' import: the package is missing from
+ *    package.json, so the module does not resolve (TS2307).
+ *  - The './SignOutButton' import: no such module exists anywhere in the
+ *    repo (TS2307).
+ *  - `session.user.id` is `string | undefined` under strict null checks but
+ *    SidebarChatList and FriendRequestSidebarOptions require `string`
+ *    (TS2322) — fixing needs a decision on the fallback behaviour.
+ *  - No page or layout renders this component (the real dashboard renders
+ *    `@/components/SidebarDash` via Generation/Dashboard/Dashboard).
+ */
+
 import { Transition, Dialog } from '@headlessui/react'
 import { Menu, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, Fragment, useEffect, useState } from 'react'
 import { Icons } from './Icons'
+// NOTE(docs): './SignOutButton' does not exist in the repo (TS2307) — see file header
 import SignOutButton from './SignOutButton'
-import Button, { buttonVariants } from './ui/Button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import FriendRequestSidebarOptions from './FriendRequestSidebarOptions'
 import SidebarChatList from './SidebarChatList'
 import { Session } from 'next-auth'
@@ -26,6 +48,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({ friends, session, sidebar
 
   const pathname = usePathname()
 
+  // Close the drawer whenever the route changes
   useEffect(() => {
     setOpen(false)
   }, [pathname])
@@ -89,6 +112,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({ friends, session, sidebar
                             role='list'
                             className='flex flex-1 flex-col gap-y-7'>
                             <li>
+                              {/* Friend chat list (mirrors the desktop sidebar) */}
                               <SidebarChatList
                                 friends={friends}
                                 sessionId={session.user.id}
@@ -101,6 +125,9 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({ friends, session, sidebar
                               </div>
                               <ul role='list' className='-mx-2 mt-2 space-y-1'>
                                 {sidebarOptions.map((option) => {
+                                  // option.Icon is a key of the Icons map
+                                  // (type Icon = 'Logo' | 'UserPlus'); resolve
+                                  // it to the actual component
                                   const Icon = Icons[option.Icon]
                                   return (
                                     <li key={option.name}>
@@ -119,6 +146,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({ friends, session, sidebar
                                 })}
 
                                 <li>
+                                  {/* Friend requests entry point */}
                                   <FriendRequestSidebarOptions
                                     initialUnseenRequestCount={
                                       unseenRequestCount
@@ -129,6 +157,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({ friends, session, sidebar
                               </ul>
                             </li>
 
+                            {/* Profile row: avatar, name, email + sign out */}
                             <li className='-ml-6 mt-auto flex items-center'>
                               <div className='flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900'>
                                 <div className='relative h-8 w-8 bg-gray-50'>
