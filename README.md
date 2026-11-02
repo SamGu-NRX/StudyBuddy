@@ -3,7 +3,6 @@
 <p align="center">
   <strong>Improve your learning skills with an all-in-one, personalized education assistant.</strong><br>
   Unlimited MCQ and flashcard generation for standardized tests, difficult subjects, and active recall.<br>
-  <a href="https://devpost.com/software/studybuddy-qgdn7b">Best Education Project</a> • Boost Hacks II
 </p>
 
 ---
@@ -69,7 +68,7 @@ Document upload & Advanced OCR (server computing via Tesseract.js) linking to lo
 Our team gained valuable experience in:
 - Effectively using NextJS for dynamic **full-stack** development
 - Implementing AI tools on the backend, including GPT's APIs for content generation
-- Debugging and problem-solving in a hackathon environment
+- Debugging and problem-solving in a team environment
 - Project management and effective team communication
 
 ## How to Run
